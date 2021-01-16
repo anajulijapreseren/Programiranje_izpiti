@@ -48,7 +48,8 @@ let obdelovalec_vrta vrt = match vrt with
 let rec globina_oddajanja vrt = match vrt with
   |Prost -> 0
   (* |Oddan (_,(x,xs)) -> 1 + globina_oddajanja x + globina_oddajanja xs
-  |Obdelovan _ -> 0 *)
-
+  |Obdelovan _ -> 0  *)
 
 let a = globina_oddajanja vrt_primer
+
+
