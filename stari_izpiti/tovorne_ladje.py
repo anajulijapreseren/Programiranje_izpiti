@@ -20,4 +20,4 @@ def natovori(nosilnost, zabojniki):
 
 print(natovori(5, zabojniki))
 
-
+    

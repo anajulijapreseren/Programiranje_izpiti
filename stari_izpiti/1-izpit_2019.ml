@@ -41,6 +41,8 @@ type vrt = Obdelovan of najemnik
 let vrt_primer = Oddan ("K" ,(Obdelovan "Galois" ,[Obdelovan "Lagrange"; Prost]))
 let vrtic = Obdelovan "Katja"
 
+let primer = Prost
+
 let obdelovalec_vrta vrt = match vrt with
   |Obdelovan ime -> Some ime
   |_->None
@@ -48,10 +50,45 @@ let obdelovalec_vrta vrt = match vrt with
 let obdelovalec_vrta' = function Obdelovan x -> Some x | _ -> None
 
 
+let rec globina_oddajanja = function
+  | Obdelovan _->0
+  | Prost -> 0
+  | Oddan (_, (podvrt, podvrtovi)) ->
+    let globine = (List.map globina_oddajanja podvrtovi) in
+    1 + List.fold_left max (globina_oddajanja podvrt) globine
+
+let rec v_uporabi = function
+  |Prost->false
+  |Obdelovan _ -> true
+  |Oddan (_,(podvrt,vrtovi)) -> v_uporabi podvrt || (List.fold_left (||) false (List.map v_uporabi vrtovi))
+
+  let rec v_uporabi' = function
+  | Obdelovan _ -> true
+  | Prost -> false
+  | Oddan (oddajalec, (podvrt, podvrtovi)) ->
+    v_uporabi' podvrt && List.exists v_uporabi' podvrtovi
+
+let rec vsi_najemniki = function
+  | Prost -> []
+  | Obdelovan ime -> [ime]
+  | Oddan(ime,(podvrt,podvrtovi)) -> [ime] @ (vsi_najemniki podvrt) @ (List.fold_left (@) [] (List.map vsi_najemniki podvrtovi))
+
+  let rec vsi_najemniki' = function
+  | Obdelovan vrtickar -> [vrtickar]
+  | Prost -> []
+  | Oddan (oddajalec, (podvrt, podvrtovi)) ->
+    let vsi_podnajemniki =
+      List.fold_left (fun acc vrt -> vsi_najemniki vrt @ acc) [] podvrtovi
+    in
+    oddajalec :: vsi_najemniki podvrt @ vsi_podnajemniki
+
+let vsi_obdelovalci = function
+| Prost -> []
+| Obdelovan ime -> [ime]
+| Oddan(ime,(podvrt,podvrtovi)) -> (vsi_najemniki podvrt) @ (List.fold_left (@) [] (List.map vsi_najemniki podvrtovi))
 
 
-
-(*----------------------------------------------------------------------*)
+  (*----------------------------------------------------------------------*)
 let podvoji_vsoto x y = 2+(x+y)
 
 let povsod_vecji (a,b,c) (x,y,z) = a>x && b> y && c>z
