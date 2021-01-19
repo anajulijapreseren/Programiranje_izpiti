@@ -49,6 +49,38 @@ let g = List.map2 (+) [1;4;1] [3;2;8]
 
 let h = List.filter ((<)6) [2;17;8;2;9;1] (*vrne vse elemente, ki so večji od 6*)
 
+(* let rec pivotiraj p xs =
+  List.partition (fun x -> x <= p) xs
+
+ler w = pivotiraj 3 [2; 5; 9; 1; 7; 4; 3] *)
 (*------------------------------------------------------------*)
 
 (*2.NALOGA*)
+
+
+type 'a improved_list = 
+  | Prazen
+  | Vozlisce of 'a list * 'a improved_list
+
+let test = Vozlisce([1;2;20],Vozlisce([17;19;20;30],Vozlisce([100],Prazen)))
+
+let rec count sez = match sez with
+  |Prazen -> 0
+  |Vozlisce(l,preostanek) -> List.length l + count preostanek
+
+(*c manjka*)
+
+let rec is_sorted sez = match sez with
+  | Prazen -> true
+  | Vozlisce(x,xs) -> (x = List.sort compare x) || is_sorted xs
+(*ta funkcija vrne true če so urejene tabele na vozliscih, ali
+mora vrniti tudi ujemanje urejenosti vseh tabel?*)
+
+let naredi_tabelo sez = 
+  let rec shrani acc sez = match sez with
+    | Prazen -> acc
+    | Vozlisce(x,xs)-> shrani (x @ acc) xs
+in shrani [] sez
+
+let rec is_sorted' sez = (naredi_tabelo sez = List.sort compare (naredi_tabelo sez))
+(*ta funkcija pogleda da so tudi vsi seznami skupaj urejeni*)
