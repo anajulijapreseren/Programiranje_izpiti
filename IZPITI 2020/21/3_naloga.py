@@ -49,7 +49,7 @@ def max_razlika(l):
 #torej porabimo cas: 
 # - razdelimo na n podseznamov:O(n)
 # - se sprehodimo čev vsak podseznam :O(n) + O(n-1)+ ... +O(1) 
-# - cas da vzamemo maximum iz seznama z n elementi
+# - cas da vzamemo maximum iz seznama z n elementi(vgrajena funkcija max )
 
 
 
