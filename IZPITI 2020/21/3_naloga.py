@@ -1,3 +1,5 @@
+import time
+
 # =============================================================================
 # Po koncu karantene načrtuje Rožle planinski pohod po svojem najljubšem
 # gorovju. Zamislil si je že pot, ki ima veliko priložnosti za fotografiranje.
@@ -34,7 +36,6 @@ def max_razlika(l):
 
 #max([trenutno(0, l[0], l[0], l[j:]) for j in range (0,len(l)-1)])
 
-#print(max_razlika([350, 230, 370, 920, 620, 80, 520, 780, 630]))   
 
 
 
@@ -68,8 +69,40 @@ def max_razlika2(l):
             return trenutno(i+1,i_min, i_max, minimum, maximum, sez)
     return max([trenutno(0,j,j, (l[j:])[0], (l[j:])[0], l[j:]) for j in range (0,len(l)-1)])[1]
 
-print(max_razlika2([350, 230, 370, 920, 620, 80, 520, 780, 630])) 
+#print(max_razlika2([350, 230, 370, 920, 620, 80, 520, 780, 630])) 
 
 #funkcija dela isto, le da si še zapomne mesto min in max ideksa
 # (mesto max je gledano glede na min, zato na koncu se pristejemo min )
 # koncamo tako da pogledamo max razlik in vrnemo ustrezna indeksa
+
+
+
+def rozle_vrednost_deli_in_vladaj(xs):
+    # O(n logn)
+
+    def rozle(i, j):
+        if i >= j-1:                                 
+            return 0
+
+        half = (i+j) // 2 
+        both_left = rozle(i, half)
+        both_right = rozle(half, j)
+        different = max(xs[half:]) - min(xs[:half])
+
+        return max(both_left, both_right, different)
+
+    return rozle(0, len(xs))
+
+def rozle_vrednost_pametno(xs):
+    # O(n)
+
+    cummin = []
+    opt_min = xs[0]
+    for x in xs:
+        if x < opt_min:
+            opt_min = x
+        cummin.append(opt_min)
+
+    print(cummin)
+
+    return max([(x - opt_min) for (x, opt_min) in zip(xs, cummin)])

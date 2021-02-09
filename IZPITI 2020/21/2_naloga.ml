@@ -67,6 +67,16 @@ let pospravi sez =
     | (Lonec (x,y))::xs -> shranjuj (x::y::acc) xs
     | (Omara(sez))::xs -> shranjuj (acc @ sez) xs
   in shranjuj [] sez
+
+let rec pospravi' kuhinja =
+  let rec collect acc = function
+    | Ponev x -> (x::acc)  
+    | Lonec (x, y) -> (x::y::acc)  
+    | Omara xs -> (List.fold_left (fun acc x -> x :: acc) acc xs)
+  in
+  Omara (List.fold_left collect [] kuhinja)
+
+
 (* e *)
 (*----------------------------------------------------------------------------*]
   Napišite funkcijo [oceni], ki sprejme seznam tipa ['a kuhinjski_element list]

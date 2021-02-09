@@ -38,6 +38,13 @@ let trojica_graficno ((a : int option ) ,(b : int option ),(c : int option )) = 
   |(_, Some b, _) -> "(-,b,-)"
   |(_, _, _) -> "(-,-,-)"
 
+  let trojica_graficno' (x, y, z) =
+    let niz = function
+      | None -> "-"
+      | Some x -> string_of_int x
+    in
+    "(" ^ niz x ^ ", " ^ niz y ^ ", " ^ niz z ^ ")"
+
 (* d *)
 (*----------------------------------------------------------------------------*]
   Klic funkcije [nedeljivo_do x n] preveri, da število [x] ni deljivo z nobenim
@@ -74,4 +81,18 @@ let razcepi_pri_None sez =
   | _::xs -> shranjuj (koncen_acc @ [trenutni_acc]) [] xs
 in shranjuj [] [] sez
   
+let razcepi_pri_None' list =
+  let rec razcepi acc_done acc_current = function
+    | [] -> (List.rev acc_current) :: acc_done |> List.rev
+    | Some x :: xs -> razcepi acc_done (x :: acc_current) xs
+    | None :: xs -> razcepi ((List.rev acc_current) :: acc_done) [] xs
+  in
+  razcepi [] [] list
 
+  let razcepi_pri_None'' list =
+  let rec razcepi acc_done acc_current = function
+    | [] -> List.rev((List.rev acc_current) :: acc_done)
+    | Some x :: xs -> razcepi acc_done (x :: acc_current) xs
+    | None :: xs -> razcepi ((List.rev acc_current) :: acc_done) [] xs
+  in
+  razcepi [] [] list
